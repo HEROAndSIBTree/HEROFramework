@@ -7,10 +7,10 @@ To conduct the global intersection or local intersection, run:
 ```
 pairtest -opt
 ```
-where ```-opt``` refer to "global" or "local".
+where ```-opt``` should be replaced by "global" or "local".
 
 To conduct the triangle counting (tc), maximal clique enumeration (mc) and subgraph listing (sl), just run the corresponding executable. Take ```tc``` as example:
 ```
 tc -graphfile
 ```
-where  ```-graphfile``` is the name of graph datasets (please refer to lines 34-45 in the graph.hpp).
+where  ```-graphfile``` should be replaced by the name of graph datasets (please refer to lines 34-45 in the graph.hpp).
