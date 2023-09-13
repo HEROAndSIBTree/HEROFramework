@@ -9,4 +9,8 @@ pairtest -opt
 ```
 where ```-opt``` refer to "global" or "local".
 
-To conduct the triangle counting (tc), maximal clique enumeration (mc) and subgraph listing (sl), just run the corresponding executables without any parameters.
+To conduct the triangle counting (tc), maximal clique enumeration (mc) and subgraph listing (sl), just run the corresponding executable as follows:
+```
+Task -graphfile
+```
+where Task is one of tc, mc or sl, and graphfile is the name of graph datasets (please refer to lines 34-45 in the graph.hpp).
