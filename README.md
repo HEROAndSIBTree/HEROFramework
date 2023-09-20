@@ -5,14 +5,16 @@ We provide a makefile to compile the executable programms. By typing ```make``` 
 
 To conduct the global intersection or local intersection, run:
 ```
-pairtest -opt
+./pairtest -opt
 ```
 where ```-opt``` should be replaced by "global" or "local".
 
 To conduct the triangle counting (tc), maximal clique enumeration (mc) and subgraph listing (sl), just run the corresponding executable. Take ```tc``` as example:
 ```
-tc -graphfile
+./tc -graphfile
 ```
 where  ```-graphfile``` should be replaced by the name of graph datasets (please refer to lines 34-45 in the graph.hpp).
 
 Due to the storage limitation, the dataset is shared through the Google Drive. Please get access from the following linking: https://drive.google.com/open?id=1mhDTHIO-OxhW1jSd18LwloOtX4msSn-F&usp=drive_fs.
+
+We feel sorry that only graphfiles with origin ID are contained in the above link corrently, since we are troubled by the poor uploading speed. To get the competitor orderings, please turn to the following github repository (the corresponding paper has already be cited in our submission.): https://github.com/pkumod/GraphSetIntersection.  
