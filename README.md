@@ -17,4 +17,4 @@ where  ```-graphfile``` should be replaced by the name of graph datasets (please
 
 Due to the storage limitation, the dataset is shared through the Google Drive. Please get access from the following linking: https://drive.google.com/open?id=1mhDTHIO-OxhW1jSd18LwloOtX4msSn-F&usp=drive_fs.
 
-We feel sorry that only graphfiles with origin ID are contained in the above link corrently, since we are troubled by the poor uploading speed. To get the competitor orderings, please turn to the following github repository (the corresponding paper has already be cited in our submission.): https://github.com/pkumod/GraphSetIntersection.  
+We feel sorry that only graphfiles with origin ID are contained in the above link currently, since we are troubled by the poor uploading speed. Our proposed HBGP ordering can be get by running the excutable '''./reorder'''. To get the competitor orderings, please turn to the following github repository (the corresponding paper has already be cited in our submission.): https://github.com/pkumod/GraphSetIntersection.  
