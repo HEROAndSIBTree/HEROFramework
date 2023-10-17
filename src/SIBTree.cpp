@@ -10,7 +10,7 @@ SIB_Tree::SIB_Tree(const Graph& g) {
 	inds = (int*)malloc((n + 1) * sizeof(int));
 	degrees = (int*)malloc(n * sizeof(int));
 	vector<SIB_Tree_Node> tmp_vals;
-	int max_degree = 0;
+	max_degree = 0;
 	for (node u = 0; u < n; ++u) {
 		int cnt_ind = u;
 		inds[cnt_ind++] = tmp_vals.size();
@@ -26,7 +26,6 @@ SIB_Tree::SIB_Tree(const Graph& g) {
 			// if (g.get_number_of_neighbors(v) < 2) continue;
 			if (v > right) {
 				tmp_vals.push_back({ k, -1, val});
-				// ("%d, %llu, %d!\n", k, val, -1);
 				k = v >> 6;
 				val = 0;
 				right = ((k + 1) << 6) - 1;
@@ -35,7 +34,6 @@ SIB_Tree::SIB_Tree(const Graph& g) {
 			val |= static_cast <ull> (1) << tmp;
 		}
 		tmp_vals.push_back({ k, -1, val});
-		// printf("%d, %llu, %d!\n", k, val, -1);
 
 		int left = inds[cnt_ind - 1];
 		int tmp_right = tmp_vals.size();
@@ -46,7 +44,6 @@ SIB_Tree::SIB_Tree(const Graph& g) {
 		while (ptr < tmp_right) {
 			if (tmp_vals[ptr].base > right) {
 				tmp_vals.push_back({ k, left, val});
-				// printf("%d, %llu, %d!\n", k, left, val);
 				k = tmp_vals[ptr].base >> 6;
 				val = 0;
 				left = ptr;
@@ -57,7 +54,6 @@ SIB_Tree::SIB_Tree(const Graph& g) {
 			ptr++;
 		}
 		tmp_vals.push_back({ k, left, val});
-		// printf("%d, %llu, %d!\n", k, left, val);
 
 		left = tmp_right;
 		tmp_right = tmp_vals.size();
@@ -68,7 +64,6 @@ SIB_Tree::SIB_Tree(const Graph& g) {
 		while (ptr < tmp_right) {
 			if (tmp_vals[ptr].base > right) {
 				tmp_vals.push_back({ k, left, val});
-				// printf("%d, %llu, %d!\n", k, left, val);
 				k = tmp_vals[ptr].base >> 6;
 				val = 0;
 				left = ptr;
@@ -79,7 +74,6 @@ SIB_Tree::SIB_Tree(const Graph& g) {
 			ptr++;
 		}
 		tmp_vals.push_back({ k, left, val});
-		// printf("%d, %llu, %d!\n", k, left, val);
 
 		if (max_level == 4) {
 			left = tmp_right;
@@ -101,34 +95,34 @@ SIB_Tree::SIB_Tree(const Graph& g) {
 		multi_level_vals[i] = tmp_vals[i];
 	}
 
-	tmp_result = (ull**)malloc((max_level - 1) * sizeof(ull*));
-	tmp_result_cnt = (ull*)malloc((max_level - 1) * sizeof(ull));
+	// tmp_result = (ull**)malloc((max_level - 1) * sizeof(ull*));
+	// tmp_result_cnt = (ull*)malloc((max_level - 1) * sizeof(ull));
 
-	for (int i = 0; i < 3; ++i) {
-		tmp_result[i] = (ull*)malloc(max_degree * sizeof(ull));
-		tmp_result_cnt[i] = 0;
-	}
+	// for (int i = 0; i < 3; ++i) {
+	// 	tmp_result[i] = (ull*)malloc(max_degree * sizeof(ull));
+	// 	tmp_result_cnt[i] = 0;
+	// }
 }
 
 SIB_Tree::~SIB_Tree() {
 	free(inds);
 	free(multi_level_vals);
 	free(degrees);
-	free(tmp_result_cnt);
-	for (int i = 0; i < 3; ++i) free(tmp_result[i]);
-	free(tmp_result);
+	// free(tmp_result_cnt);
+	// for (int i = 0; i < 3; ++i) free(tmp_result[i]);
+	// free(tmp_result);
 }
 
-void SIB_Tree::create_tmp_index(int &num_chunk, SIB_Tree_Node* new_vals) 
+void SIB_Tree::create_tmp_index(int &num_tree_nodes, SIB_Tree_Node* new_vals) 
 {
-	if (num_chunk == 0) return;
+	if (num_tree_nodes == 0) return;
 	auto start = steady_clock::now();
 	int cnt_val = 0;
 	int tmp_right = 0;
 
 	for(int i = 0; i < max_level; ++i) {
 		if (i == 0) {
-			cnt_val = num_chunk;
+			cnt_val = num_tree_nodes;
 		}
 		else {
 			int left = tmp_right;
@@ -152,7 +146,7 @@ void SIB_Tree::create_tmp_index(int &num_chunk, SIB_Tree_Node* new_vals)
 			new_vals[cnt_val++] = { k, left, val};
 		}
 	}
-	num_chunk = cnt_val;
+	num_tree_nodes = cnt_val;
 	auto end = steady_clock::now();
 	// cnt[0] += duration_cast<nanoseconds>(end - start).count();
 	// cnt[1] ++;
@@ -212,13 +206,15 @@ ull SIB_Tree::helper(node u, node v, int u_id, int v_id, int level) {
 
 ull SIB_Tree::helper(node u, node v, int u_id, int v_id, int level, int mu) {
 	// cnt[level]++;
+	int base = multi_level_vals[u_id].base;
+	// if (base < mu >> (6*(level+1))) return 0;
 	ull u_int = multi_level_vals[u_id].val, v_int = multi_level_vals[v_id].val;
 	ull ans_int = u_int & v_int;
 	if (ans_int == 0) return 0;
 	ull ans = 0;
 	if (level > 0) {
 		if (ans_int == 1) {
-			ans += helper(u ,v, multi_level_vals[u_id].next_ptr, multi_level_vals[v_id].next_ptr, level - 1);
+			ans += helper(u ,v, multi_level_vals[u_id].next_ptr, multi_level_vals[v_id].next_ptr, level - 1, mu);
 		}
 		else while (ans_int) {
 			int tmp = __builtin_clzll(ans_int) + 1;
@@ -227,11 +223,13 @@ ull SIB_Tree::helper(node u, node v, int u_id, int v_id, int level, int mu) {
 			v_int = v_int << tmp;
 			ans += helper(u, v, 
 						multi_level_vals[u_id].next_ptr + __builtin_popcountll(u_int), 
-						multi_level_vals[v_id].next_ptr + __builtin_popcountll(v_int), level - 1);
+						multi_level_vals[v_id].next_ptr + __builtin_popcountll(v_int), level - 1, mu);
 		}
 	}
 	else {
-		int base = multi_level_vals[u_id].base;
+		// if (base > (mu >> 6)) return 0;
+		// else if (base < (mu >> 6)) ans += __builtin_popcountll(ans_int);
+		// else ans += __builtin_popcountll(ans_int << (63 - (mu & 63)));
 		if (base < (mu >> 6)) return 0;
 		else if (base > (mu >> 6)) ans += __builtin_popcountll(ans_int);
 		else ans += __builtin_popcountll(ans_int >> (mu & 63));
@@ -239,32 +237,32 @@ ull SIB_Tree::helper(node u, node v, int u_id, int v_id, int level, int mu) {
 	return ans;
 }
 
-ull SIB_Tree::helper(node u, const SIB_Tree_Node* tmp_vals, int u_id, int v_id, int level)
-{
-	ull u_int = multi_level_vals[u_id].val, v_int = tmp_vals[v_id].val;
-	ull ans_int = u_int & v_int;
-	if (ans_int == 0) return 0;
-	ull ans = 0;
-	if (level > 0) {
-		if (ans_int == 1) {
-			ans += helper(u, tmp_vals, multi_level_vals[u_id].next_ptr,
-								tmp_vals[v_id].next_ptr, level - 1);
-		}
-		else while (ans_int) {
-			int tmp = __builtin_clzll(ans_int) + 1;
-			ans_int = ans_int << tmp;
-			u_int = u_int << tmp;
-			v_int = v_int << tmp;
-			ans += helper(u, tmp_vals, 
-						multi_level_vals[u_id].next_ptr + __builtin_popcountll(u_int), 
-						tmp_vals[v_id].next_ptr + __builtin_popcountll(v_int), level - 1);
-		}
-	}
-	else {
-		ans += __builtin_popcountll(ans_int);
-	}	
-	return ans;
-}
+// ull SIB_Tree::helper(node u, const SIB_Tree_Node* tmp_vals, int u_id, int v_id, int level)
+// {
+// 	ull u_int = multi_level_vals[u_id].val, v_int = tmp_vals[v_id].val;
+// 	ull ans_int = u_int & v_int;
+// 	if (ans_int == 0) return 0;
+// 	ull ans = 0;
+// 	if (level > 0) {
+// 		if (ans_int == 1) {
+// 			ans += helper(u, tmp_vals, multi_level_vals[u_id].next_ptr,
+// 								tmp_vals[v_id].next_ptr, level - 1);
+// 		}
+// 		else while (ans_int) {
+// 			int tmp = __builtin_clzll(ans_int) + 1;
+// 			ans_int = ans_int << tmp;
+// 			u_int = u_int << tmp;
+// 			v_int = v_int << tmp;
+// 			ans += helper(u, tmp_vals, 
+// 						multi_level_vals[u_id].next_ptr + __builtin_popcountll(u_int), 
+// 						tmp_vals[v_id].next_ptr + __builtin_popcountll(v_int), level - 1);
+// 		}
+// 	}
+// 	else {
+// 		ans += __builtin_popcountll(ans_int);
+// 	}	
+// 	return ans;
+// }
 
 ull SIB_Tree::helper(node u, node v, int u_id, int v_id, int level, node* res, ull &cnt_res) {
 	ull u_int = multi_level_vals[u_id].val, v_int = multi_level_vals[v_id].val;
@@ -292,27 +290,27 @@ ull SIB_Tree::helper(node u, node v, int u_id, int v_id, int level, node* res, u
 	return cnt_res;
 }
 
-ull SIB_Tree::helper(node u,  node v, int u_id, int v_id, int level, SIB_Tree_Node* res, int& num_chunk)
+ull SIB_Tree::helper(node u,  node v, int u_id, int v_id, int level, SIB_Tree_Node* res, int& num_tree_nodes)
 {
 	ull u_int = multi_level_vals[u_id].val, v_int = multi_level_vals[v_id].val;
 	ull ans_int = u_int & v_int, ans_cnt = 0;
 	if (ans_int == 0) return 0;
 	if (level > 0) {
 		if (ans_int == 1) {
-			ans_cnt += helper(u , v, multi_level_vals[u_id].next_ptr, multi_level_vals[v_id].next_ptr, level - 1, res, num_chunk);
+			ans_cnt += helper(u , v, multi_level_vals[u_id].next_ptr, multi_level_vals[v_id].next_ptr, level - 1, res, num_tree_nodes);
 		}
 		else while (ans_int) {
 			int tmp = 64 - __builtin_ctzll(ans_int);
 			ans_int &= ans_int-1;
 			if (tmp == 64) 
-				ans_cnt += helper(u, v, multi_level_vals[u_id].next_ptr, multi_level_vals[v_id].next_ptr, level-1, res, num_chunk);
+				ans_cnt += helper(u, v, multi_level_vals[u_id].next_ptr, multi_level_vals[v_id].next_ptr, level-1, res, num_tree_nodes);
 			else ans_cnt += helper(u, v, multi_level_vals[u_id].next_ptr + __builtin_popcountll(u_int<<tmp), 
-					multi_level_vals[v_id].next_ptr + __builtin_popcountll(v_int<<tmp), level - 1, res, num_chunk);
+					multi_level_vals[v_id].next_ptr + __builtin_popcountll(v_int<<tmp), level - 1, res, num_tree_nodes);
 		}
 	}
 	else {
 		int k = multi_level_vals[u_id].base;
-		res[num_chunk++] = {k, -1, ans_int};
+		res[num_tree_nodes++] = {k, -1, ans_int};
 		ans_cnt += __builtin_popcountll(ans_int);
 	}
 	return ans_cnt;
@@ -350,10 +348,24 @@ ull SIB_Tree::count_intersection(node u, node v) {
 	return helper(u, v, inds[u+1]-1, inds[v+1]-1, max_level - 1);
 }
 
-ull SIB_Tree::count_intersection(node u, const int num_chunk, const SIB_Tree_Node* tmp_vals)
+ull SIB_Tree::count_intersection(node u, const int num_tree_nodes, const SIB_Tree_Node* tmp_vals)
 {
-	if (inds[u] == inds[1 + u] || num_chunk == 0) return 0;
-	return helper(u, tmp_vals, inds[u + 1] - 1, num_chunk - 1, max_level - 1);
+	int u_ind = inds[u], v_ind = 0;
+	ull res = 0;
+	while (u_ind < inds[u+1] && v_ind < num_tree_nodes) {
+		if (multi_level_vals[u_ind].next_ptr >= 0) break;
+		if (multi_level_vals[u_ind].base == tmp_vals[v_ind].base) {
+			ull val = multi_level_vals[u_ind].val & tmp_vals[v_ind].val;
+			if (val) {
+				res += __builtin_popcountll(val);
+			}
+			u_ind++;
+			v_ind++;
+		}
+		else if (multi_level_vals[u_ind].base < tmp_vals[v_ind].base) u_ind++;
+		else v_ind++;
+	}
+	return res;
 }
 
 ull SIB_Tree::conditional_cuont_intersection(node u, node v, int mu){
@@ -368,17 +380,17 @@ ull SIB_Tree::get_intersection(node u, node v, node* res) {
 	return ans;
 }
 
-ull SIB_Tree::get_intersection(node u, node v, SIB_Tree_Node* res, int &num_chunk) {
-	num_chunk = 0;
+ull SIB_Tree::get_intersection(node u, node v, SIB_Tree_Node* res, int &num_tree_nodes) {
+	num_tree_nodes = 0;
 	if (inds[u] == inds[u+1] || inds[v] == inds[v+1]) return 0;
-	ull ans = helper(u, v, inds[u+1]-1, inds[v+1]-1, max_level-1, res, num_chunk);
+	ull ans = helper(u, v, inds[u+1]-1, inds[v+1]-1, max_level-1, res, num_tree_nodes);
 	return ans;
 }
 
-ull SIB_Tree::get_intersection(node u, const int ptr, const SIB_Tree_Node* tmp_vals, SIB_Tree_Node* res, int& num_chunk)
+ull SIB_Tree::get_intersection(node u, const int ptr, const SIB_Tree_Node* tmp_vals, SIB_Tree_Node* res, int& num_tree_nodes)
 {
 	if (inds[u] == inds[1 + u] || ptr == 0) return 0; 
-	ull ans = helper(u, tmp_vals, inds[u+1] - 1, ptr - 1, max_level - 1, res, num_chunk);
+	ull ans = helper(u, tmp_vals, inds[u+1] - 1, ptr - 1, max_level - 1, res, num_tree_nodes);
 	return ans;
 }
 
@@ -512,6 +524,7 @@ void SIB_Tree::BKP(vector<Temp_Tree_Node> &tmp_vals, ull &p_cnt, ull &res) {
 ull SIB_Tree::mc(int *&Vrank, vector<node> &new_id) {
 	ull result = 0;
 	for (int i = 0; i < n; i++) {
+		if (i % 1000 == 0) printf("Current Node: %d, maximal cliques found: %llu!\n", i, result);
 		int u = new_id[i];
 		 if (u >= n ) {
 			// result++;
@@ -553,19 +566,66 @@ ull SIB_Tree::four_cycle_listing() {
 				int j_id = j_base + __builtin_ctzll(j_val);
 				j_val &= j_val - 1;
 				// if (j_id < i) continue;
-				// for (int k = inds[i]; k < inds[i+1]; ++k) {
-				for (int k = j; k <= inds[i+1]; ++k) {	
+				for (int k = inds[i]; k <= j; ++k) {
+				// for (int k = j; k <= inds[i+1]; ++k) {	
 					if (multi_level_vals[k].next_ptr >= 0) break;
 					int k_base = multi_level_vals[k].base << 6;
 					ull k_val = multi_level_vals[k].val;
-					if (j_base == k_base) k_val &= j_val;
+					if (j_base == k_base) k_val ^= j_val;
 					while(k_val > 0) {
 						int k_id = k_base + __builtin_ctzll(k_val);
 						k_val &= k_val - 1;
-						if (k_id <= j_id) continue;
-						// ull tmp = count_intersection(j_id, k_id);
-						ull tmp = conditional_cuont_intersection(j_id, k_id, i);
+						if (k_id >= j_id) continue;
+						ull tmp = count_intersection(j_id, k_id);
+						// ull tmp = conditional_cuont_intersection(j_id, k_id, i);
 						if (tmp > 1) res += tmp-1;
+					}
+				}
+			}
+		}
+	}
+	return res;
+}
+
+ull SIB_Tree::four_dimond_listing() {
+	ull res = 0;
+	for (int i = 0; i < n; ++i) {
+		for (int j = inds[i]; j < inds[i+1]; ++j) {
+			if (multi_level_vals[j].next_ptr >= 0) break;
+			int j_base = multi_level_vals[j].base << 6;
+			ull j_val = multi_level_vals[j].val;
+			while (j_val > 0) {
+				int j_id = j_base + __builtin_ctzll(j_val);
+				j_val &= j_val - 1;
+				if (j_id < i) continue;
+				ull tmp = count_intersection(i, j_id);
+				res += (tmp-1)*tmp/2;
+			}
+		}
+	}
+	return res;
+}
+
+ull SIB_Tree::four_clique_listing() {
+	ull res = 0;
+	SIB_Tree_Node* tmp = (SIB_Tree_Node*)malloc((max_degree) * sizeof(SIB_Tree_Node));
+	int num_tree_nodes;
+	for (int i = 0; i < n; ++i) {
+		for(int j = inds[i]; j < inds[i+1]; ++j) {
+			if (multi_level_vals[j].next_ptr >= 0) break;
+			int j_base = multi_level_vals[j].base << 6;
+			ull j_val = multi_level_vals[j].val;
+			while (j_val > 0) {
+				int j_id = j_base + __builtin_ctzll(j_val);
+				j_val &= j_val - 1;
+				get_intersection(i, j_id, tmp, num_tree_nodes);
+				for (int k = 0; k < num_tree_nodes; ++k) {
+					int k_base = tmp[k].base << 6;
+					ull k_val = tmp[k].val;
+					while (k_val > 0) {
+						int k_id = k_base + __builtin_ctzll(k_val);
+						k_val &= k_val - 1;
+						res += count_intersection(k_id, num_tree_nodes, tmp);
 					}
 				}
 			}

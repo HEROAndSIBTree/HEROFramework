@@ -79,6 +79,8 @@ public:
 	ull cnt_tri_merge();
 	ull combo(ull a, ull b);
 	ull four_cycle_listing();
+	ull four_dimond_listing();
+	ull four_clique_listing();
 	void create_dag();
 	void get_neighbors(node u, vector<node>& neis) const;
 	void get_common_neighbors(node u, node v, vector<node>& res) const;

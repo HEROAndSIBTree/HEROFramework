@@ -245,41 +245,41 @@ void test_graph(string path){
     vector<node> new_id(g.get_num_nodes(), -1);
     for (int i = 0; i < new_id.size(); ++i) new_id[i] = i;
 
-    t_start = chrono::steady_clock::now();
-	ull res = mc(g, Vrank, true);
-    t_end = chrono::steady_clock::now();
-    ull t_merge = chrono::duration_cast<chrono::milliseconds>(t_end - t_start).count();
-	printf("Time used for mc using merge intersection: %lld ms!\n", t_merge);
-    printf("Number of maximal cliques: %lld!\n", res);
+    // t_start = chrono::steady_clock::now();
+	// ull res = mc(g, Vrank, true);
+    // t_end = chrono::steady_clock::now();
+    // ull t_merge = chrono::duration_cast<chrono::milliseconds>(t_end - t_start).count();
+	// printf("Time used for mc using merge intersection: %lld ms!\n", t_merge);
+    // printf("Number of maximal cliques: %lld!\n", res);
 
     t_start = chrono::steady_clock::now();
-	res = g_sib.mc(Vrank, new_id);
+	ull res = g_sib.mc(Vrank, new_id);
     t_end = chrono::steady_clock::now();
     ull t_bit = chrono::duration_cast<chrono::milliseconds>(t_end - t_start).count();
 	printf("Time used for mc using SIB tree intersection: %lld ms!\n", t_bit);
     printf("Number of maximal cliques: %lld!\n", res);
-    printf("Speed up: x%.3f!\n", (float)t_merge / (float)t_bit);
+    // printf("Speed up: x%.3f!\n", (float)t_merge / (float)t_bit);
     
-    for (auto s : reorder_files) {
-        printf("============%s Order==============\n", s[0].c_str());
-        Graph g_new_order(dict_path+s[0]+path+s[1]+".txt");
-        vector<node> new_id(g.get_num_nodes(), -1);
-        if (s[0] != "HBGP") read_vector(dict_path+s[0]+path+s[2]+".txt", new_id, true);
-        // if (s[0] != "Hierarchical_Graph_Partition") read_vector(dict_path+s[0]+path+s[2]+".txt", new_id, true);
-        else read_vector(dict_path+s[0]+path+s[2]+".txt", new_id, false);
-        SIB_Tree g_sib(g_new_order);
-        int *VNrank = new int[k];
-        for (int i = 0; i < new_id.size(); ++i) {
-            VNrank[new_id[i]] = Vrank[i];
-        }
-        t_start = chrono::steady_clock::now();
-	    res = g_sib.mc(VNrank, new_id);
-        t_end = chrono::steady_clock::now();
-        t_bit = chrono::duration_cast<chrono::milliseconds>(t_end - t_start).count();
-	    printf("Time used for mc using SIB tree intersection: %lld ms!\n", t_bit);
-        printf("Number of maximal cliques: %lld!\n", res);
-	    printf("Speed up: x%.3f!\n", (float)t_merge / (float)t_bit);
-    }
+    // for (auto s : reorder_files) {
+    //     printf("============%s Order==============\n", s[0].c_str());
+    //     Graph g_new_order(dict_path+s[0]+path+s[1]+".txt");
+    //     vector<node> new_id(g.get_num_nodes(), -1);
+    //     if (s[0] != "HBGP") read_vector(dict_path+s[0]+path+s[2]+".txt", new_id, true);
+    //     // if (s[0] != "Hierarchical_Graph_Partition") read_vector(dict_path+s[0]+path+s[2]+".txt", new_id, true);
+    //     else read_vector(dict_path+s[0]+path+s[2]+".txt", new_id, false);
+    //     SIB_Tree g_sib(g_new_order);
+    //     int *VNrank = new int[k];
+    //     for (int i = 0; i < new_id.size(); ++i) {
+    //         VNrank[new_id[i]] = Vrank[i];
+    //     }
+    //     t_start = chrono::steady_clock::now();
+	//     res = g_sib.mc(VNrank, new_id);
+    //     t_end = chrono::steady_clock::now();
+    //     t_bit = chrono::duration_cast<chrono::milliseconds>(t_end - t_start).count();
+	//     printf("Time used for mc using SIB tree intersection: %lld ms!\n", t_bit);
+    //     printf("Number of maximal cliques: %lld!\n", res);
+	//     printf("Speed up: x%.3f!\n", (float)t_merge / (float)t_bit);
+    // }
 }
 
 int main(int argc, char **argv) {

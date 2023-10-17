@@ -107,7 +107,25 @@ ull Graph::conditional_cnt_common_neighbor(node u, node v, node mu) {
 	return ans;
 }
 
+// ull Graph::conditional_cnt_common_neighbor(node u, node v, node mu) {
+// 	int u_ind = 0, v_ind = 0;
+// 	ull ans = 0;
+// 	while(u_ind < adj_list[u].size() && v_ind < adj_list[v].size()) {
+// 		// __cnt++;
+// 		if (adj_list[u][u_ind] > mu || adj_list[v][v_ind] > mu) break;
+// 		else if (adj_list[u][u_ind] == adj_list[v][v_ind]) {
+// 			ans++;
+// 			u_ind++;
+// 			v_ind++;
+// 		}
+// 		else if (adj_list[u][u_ind] < adj_list[v][v_ind]) u_ind++;
+// 		else v_ind++;
+// 	}
+// 	return ans;
+// }
+
 void Graph::get_common_neighbors(node u, node v, vector<node>& res) const {
+	res.clear();
 	int u_ind = 0, v_ind = 0;
 	while(u_ind < adj_list[u].size() && v_ind < adj_list[v].size()) {
 		if (adj_list[u][u_ind] == adj_list[v][v_ind]) {
@@ -124,7 +142,7 @@ void Graph::create_dag(){
 	for(int i = 0; i < adj_list.size(); ++i) {
 		adj_list[i].clear();
 		for (int j = inds[i]; j < inds[i+1]; ++j) {
-			if (i < vals[j]) adj_list[i].push_back(vals[j]);
+			if (i > vals[j]) adj_list[i].push_back(vals[j]);
 		}	
 		if (!adj_list[i].empty()) sort(adj_list[i].begin(), adj_list[i].end());
 	}
@@ -278,12 +296,38 @@ ull Graph::four_cycle_listing() {
 	ull res = 0;
 	for (int i = 0; i < num_nodes; ++i) {
 		for (int j = 0; j < adj_list[i].size(); ++j) {
-			// if (adj_list[i][j] < i) continue;
+			if (adj_list[i][j] < i) continue;
 			for (int k = 0; k < adj_list[i].size(); ++k) {
 				if (k <= j) continue;
-				// ull tmp = conditional_cnt_common_neighbor(adj_list[i][j], adj_list[i][k], i);
-				ull tmp = cnt_common_neighbors(adj_list[i][j], adj_list[i][k]);
+				ull tmp = conditional_cnt_common_neighbor(adj_list[i][j], adj_list[i][k], i);
+				// ull tmp = cnt_common_neighbors(adj_list[i][j], adj_list[i][k]);
 				if (tmp > 1) res += tmp-1;
+			}
+		}
+	}
+	return res;
+}
+
+ull Graph::four_dimond_listing() {
+	ull res = 0;
+	for (int i = 0; i < num_nodes; ++i) {
+		for (auto j : adj_list[i]) {
+			if (j <= i) continue;
+			ull tmp = cnt_common_neighbors(i, j);
+			res += (tmp - 1) * tmp / 2;
+		}
+	}
+	return res;
+}
+
+ull Graph::four_clique_listing() {
+	ull res = 0;
+	vector<node> tmp;
+	for (int i = 0; i < num_nodes; ++i) {
+		for (auto j : adj_list[i]) {
+			get_common_neighbors(i, j, tmp);
+			for (auto k : tmp) {
+				res += cnt_common_neighbors(k, tmp);
 			}
 		}
 	}

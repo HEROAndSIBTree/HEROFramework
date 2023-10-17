@@ -6,7 +6,9 @@ ull test_merge(Graph &g){
 
 	steady_clock::time_point t_start, t_end;
 	t_start = steady_clock::now();
-	ans = g.four_cycle_listing();
+	// ans = g.four_cycle_listing();
+	// ans = g.four_dimond_listing();
+	ans = g.four_clique_listing();
 	t_end = steady_clock::now();
     t_merge = duration_cast<chrono::milliseconds>(t_end-t_start).count();
 
@@ -25,7 +27,9 @@ ull test_SIB_Tree(Graph &g){
 	ull ans = 0, t_vec = 0;
 	
 	t_start = steady_clock::now();
-	ans = g_sib.four_cycle_listing();
+	// ans = g_sib.four_cycle_listing();
+	// ans = g_sib.four_dimond_listing();
+	ans = g_sib.four_clique_listing();
 	t_end = steady_clock::now();
 	t_vec = duration_cast<chrono::milliseconds>(t_end - t_start).count();
 
@@ -40,7 +44,8 @@ void test_graph(string path){
 	auto t_end = steady_clock::now();
 	ull t_used = duration_cast<chrono::milliseconds>(t_end - t_start).count();
 	printf("Time used for loading graph: %lld ms!\n", t_used);
-	
+	g.create_dag();
+
 	printf("============Origin Order==============\n");
 	vector<node> neis;
 	ull t_merge = test_merge(g);
@@ -50,6 +55,7 @@ void test_graph(string path){
 	for (auto s : reorder_files) {
         printf("============%s Order==============\n", s[0].c_str());
         Graph g_new_order(dict_path+s[0]+path+s[1]+".txt");
+		g_new_order.create_dag();
         t_sib = test_SIB_Tree(g_new_order);
 	    printf("Speed up: x%.3f!\n", (float)t_merge / (float)t_sib);
     }
