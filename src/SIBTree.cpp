@@ -524,15 +524,14 @@ void SIB_Tree::BKP(vector<Temp_Tree_Node> &tmp_vals, ull &p_cnt, ull &res) {
 ull SIB_Tree::mc(int *&Vrank, vector<node> &new_id) {
 	ull result = 0;
 	for (int i = 0; i < n; i++) {
-		if (i % 1000 == 0) printf("Current Node: %d, maximal cliques found: %llu!\n", i, result);
 		int u = new_id[i];
-		 if (u >= n ) {
+		if (u >= n ) {
 			// result++;
 			continue;
 		}
 		vector<Temp_Tree_Node> S;
 		S.reserve(inds[u+1] - inds[u]);
-        ull p_cnt = 0;
+        	ull p_cnt = 0;
 		for (int j = inds[u]; j < inds[u+1]; ++j) {
 			if (multi_level_vals[j].next_ptr >= 0) break;
 			int base = multi_level_vals[j].base;
@@ -549,7 +548,7 @@ ull SIB_Tree::mc(int *&Vrank, vector<node> &new_id) {
 			}
 			S.push_back({base, val_s, val_p});
 		}
-        BKP(S, p_cnt, result);
+        	BKP(S, p_cnt, result);
 	}
 	return result;
 }
