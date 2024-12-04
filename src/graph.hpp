@@ -1,6 +1,5 @@
 #pragma once
 #include<algorithm>
-#include<boost/dynamic_bitset.hpp>
 #include<chrono>
 #include<fstream>
 #include<iostream>
