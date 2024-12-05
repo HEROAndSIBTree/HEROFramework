@@ -9,7 +9,7 @@ cmake .. -DPATH_MACRO="/path_of_your_datasets"
 make -j
 cd ..
 ```
-Note that we use ```-DPATH_MACRO``` to set the directory of the graph datasets. If you just want to use the demo graph contained in the ```data``` folder, please use ```-DPATH_MACRO=/path_of_your_HERO_repository/data/".
+Note that we use ```-DPATH_MACRO``` to set the directory of the graph datasets. If you just want to use the demo graph contained in the ```data``` folder, please use ```-DPATH_MACRO="/path_of_your_HERO_repository/data/"```.
 
 Five executables will be generated in the created folder ```bin```, that is, ```tc```, ```mc```, ```sl```, ```pt``` and ```reorder```. Among these executables, the ```reorder``` is used to get the HBGP order (proposed in the above paper) of graphs, while the others refer to the downstream tasks which are conducted in the experiments section of the above paper.
 
