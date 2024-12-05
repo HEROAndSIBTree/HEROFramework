@@ -1,13 +1,14 @@
 ROOT="$HERO_ROOT"
 EXE=${ROOT}/bin/mc
+# If you have download the full dataset, please uncomment the script below to obtain the complete experimental results.
 GRAPHS=(
     twitter \
-    google \
-    youtube \
-    berkstan \
-    skitter \
-    pokec \
-    wiki
+    # google \
+    # youtube \
+    # berkstan \
+    # skitter \
+    # pokec \
+    # wiki
 )
 
 cd ${ROOT}
