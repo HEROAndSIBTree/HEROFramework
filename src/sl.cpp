@@ -12,8 +12,8 @@ ull test_merge(Graph &g, const string &pattern){
 	t_end = steady_clock::now();
     t_merge = duration_cast<chrono::milliseconds>(t_end-t_start).count();
 
-	printf("Time used for listing %s using merge intersection: %lld ms!\n", pattern, t_merge);
-	printf("Total number of %s: %lld !\n", pattern, ans);	
+	printf("Time used for listing %s using merge intersection: %lld ms!\n", pattern.c_str(), t_merge);
+	printf("Total number of %s: %lld !\n", pattern.c_str(), ans);	
 	return t_merge;
 }
 
@@ -33,8 +33,8 @@ ull test_SIB_Tree(Graph &g, const string &pattern){
 	t_end = steady_clock::now();
 	t_vec = duration_cast<chrono::milliseconds>(t_end - t_start).count();
 
-	printf("Time used for listing %s using SIB tree intersection: %lld ms!\n", pattern, t_vec);
-	printf("Total number of %s: %lld !\n", pattern, ans);
+	printf("Time used for listing %s using SIB tree intersection: %lld ms!\n", pattern.c_str(), t_vec);
+	printf("Total number of %s: %lld !\n", pattern.c_str(), ans);
 	return t_vec;
 }
 
