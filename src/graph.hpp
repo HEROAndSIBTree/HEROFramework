@@ -29,7 +29,11 @@ struct SIB_Tree_Node {
 };
 
 
-static string dict_path = "../data";
+#ifndef PATH_MACRO
+#define PATH_MACRO "../data/"
+#endif
+
+static string dict_path = PATH_MACRO;
 static vector<pair<string, string>> files = {
 		{"twitter", "/pro-twitter-81306-1342296"},
 		{"gplus", "/pro-gplus-107614-12238285"},
