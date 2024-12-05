@@ -29,7 +29,7 @@ struct SIB_Tree_Node {
 };
 
 
-static string dict_path = "/root/benchmark/Set_Intersection/processed/";
+static string dict_path = "../data";
 static vector<pair<string, string>> files = {
 		{"twitter", "/pro-twitter-81306-1342296"},
 		{"gplus", "/pro-gplus-107614-12238285"},
@@ -50,7 +50,6 @@ static vector<vector<string>> reorder_files = {
 		{"MLOGGAPA", "_MLOGGAPAorder", "_MLOGGAPAorder_newID"},
 		{"SB", "_SBorder", "_SB_newID"},
 		{"HBGP", "_HBGPorder", "_HBGPorder_newID"}
-		// {"Hierarchical_Graph_Partition", "_HGPorder", "_HGPorder_newID"}
 	};
 
 class Graph {
