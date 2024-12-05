@@ -2,7 +2,7 @@
 This repository conatins the code for paper "HERO: A Hierarchical Set Partitioning and Join Framework for Speeding up the Set Intersection Over Graphs".
 
 ## Configuration
-The source code has no extra dependacy except the C++ standard library (STL). We use the CMake 3.10.0 and the GCC 7.5.0 for configuration (the earlier versions may also work, but we are not sure). Please do as follows.
+The source code has no extra dependacy except the C++ standard library (STL). We use the CMake 3.27.4 and the GCC 7.5.0 for configuration (the earlier versions may also work, but we are not sure). Please do as follows.
 ```
 mkdir -p build && cd build
 cmake ..
