@@ -5,10 +5,12 @@ This repository conatins the code for paper "HERO: A Hierarchical Set Partitioni
 The source code has no extra dependacy except the C++ standard library (STL). We use the CMake 3.27.4 and the GCC 7.5.0 for configuration (the earlier versions may also work, but we are not sure). Please do as follows.
 ```
 mkdir -p build && cd build
-cmake .. -DPATH_MACRO="/path/to/your/datasets"
+cmake .. -DPATH_MACRO="/path_of_your_datasets"
 make -j
 cd ..
 ```
+Note that we use ```-DPATH_MACRO``` to set the directory of the graph datasets. If you just want to use the demo graph contained in the ```data``` folder, please use ```-DPATH_MACRO=/path_of_your_HERO_repository/data/".
+
 Five executables will be generated in the created folder ```bin```, that is, ```tc```, ```mc```, ```sl```, ```pt``` and ```reorder```. Among these executables, the ```reorder``` is used to get the HBGP order (proposed in the above paper) of graphs, while the others refer to the downstream tasks which are conducted in the experiments section of the above paper.
 
 ## Run Experiments
