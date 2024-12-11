@@ -5,7 +5,7 @@
 using namespace std;
 
 void read_pair_data(string graph_name, vector<pair<node, node>> &pairs, string opt) {
-    string path = "/root/benchmark/Set_Intersection/pairdata/new/" + graph_name + "_" + opt + "_newpair.txt";
+    string path = dict_path + "pairdata/" + graph_name + "_" + opt + "_pair.txt";
 
     ifstream f(path);
     string line;
